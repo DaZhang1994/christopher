@@ -7,10 +7,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { config } from '../../config/config';
 import { JwtStrategy } from './jwt.strategy';
+import { ToolsModule } from '../tools/tools.module';
 
 @Module({
   imports: [
     UsersModule,
+    ToolsModule,
     PassportModule,
     JwtModule.register({
       secret: config.token.secrets,
