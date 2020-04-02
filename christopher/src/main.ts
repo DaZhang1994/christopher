@@ -3,6 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 const Config = require(`../config/${process.env.NODE_ENV}`);
 
 async function bootstrap() {
@@ -16,6 +17,11 @@ async function bootstrap() {
 
   // setup cookie parser and its signature
   app.use(cookieParser(Config.cookie.signature));
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true
+  }));
 
   // start listening to server port
   await app.listen(3000);
