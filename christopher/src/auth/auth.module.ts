@@ -5,9 +5,9 @@ import { JwtLoginStrategy } from './jwt_login.strategy';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { config } from '../../config/config';
 import { JwtStrategy } from './jwt.strategy';
 import { ToolsModule } from '../tools/tools.module';
+const Config = require(`../../config/${process.env.NODE_ENV}`);
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { ToolsModule } from '../tools/tools.module';
     ToolsModule,
     PassportModule,
     JwtModule.register({
-      secret: config.token.secrets,
+      secret: Config.token.secrets,
       signOptions: { expiresIn: '24h' }
     }),
   ],

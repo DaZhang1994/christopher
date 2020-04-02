@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { config } from '../../config/config';
+const Config = require(`../../config/${process.env.NODE_ENV}`);
 import { Token } from './interfaces/token.interface';
 import { CryptoService } from '../tools/crypto/crypto.service';
 import { UsersService } from '../users/users.service';
@@ -16,7 +16,7 @@ export class JwtLoginStrategy extends PassportStrategy(Strategy, 'jwtLogin') {
       super({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         ignoreExpiration: false,
-        secretOrKey: config.token.secrets,
+        secretOrKey: Config.token.secrets,
         passReqToCallback: true
       });
   }
