@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
 import { JwtLoginStrategy } from './login-jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
@@ -19,7 +18,7 @@ const Config = require(`../../config/${process.env.NODE_ENV}`);
       signOptions: { expiresIn: '24h' }
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtLoginStrategy, JwtStrategy],
+  providers: [AuthService, JwtLoginStrategy, JwtStrategy],
   exports: [AuthService]
 })
 export class AuthModule {}

@@ -1,11 +1,14 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 const Config = require(`../../config/${process.env.NODE_ENV}`);
 import { Token } from './interfaces/token.interface';
 import { CryptoService } from '../tools/crypto/crypto.service';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
+import { validate, Validator } from 'class-validator';
+import { AuthDto } from './dtos/auth.dto';
+const validator = new Validator();
 
 @Injectable()
 export class JwtLoginStrategy extends PassportStrategy(Strategy, 'jwtLogin') {
@@ -23,15 +26,22 @@ export class JwtLoginStrategy extends PassportStrategy(Strategy, 'jwtLogin') {
 
   async validate(req: Request, token: Token) {
 
-    const body: any = req.body;
-
-    if(token.loggedIn == true && token.salt == '' && token.saltExp == -1) {
-      return this.authService.assignToken({ username: token.username });
+    if(validator.isNotEmpty(token) &&
+      token.loggedIn == true &&
+      token.salt == '' &&
+      token.saltExp == -1) {
+        return this.authService.assignToken({ username: token.username });
     }
 
-    if(body.username == null || body.username == '' || body.username != token.username ||
-       body.password == null || body.password == '' ||
-       token.saltExp < Date.now()) {
+    const body: any = req.body;
+
+    const err = await validate(new AuthDto(body.username, body.password));
+
+    if(err.length > 0) {
+      throw new BadRequestException('Invalid username or password!');
+    }
+
+    if(body.username != token.username || token.saltExp < Date.now()) {
          return false;
     }
 
