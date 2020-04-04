@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as RandomString from 'randomstring';
@@ -8,12 +8,9 @@ import { CryptoService } from '../tools/crypto/crypto.service';
 import { Token } from './entities/token.entity';
 import { validate, Validator } from 'class-validator';
 const validator = new Validator();
-const Config = require(`../../config/${process.env.NODE_ENV}`);
 
 @Injectable()
 export class AuthService {
-
-  private readonly logger = new Logger(AuthService.name);
 
   constructor(
     private readonly usersService: UsersService,
@@ -37,7 +34,7 @@ export class AuthService {
     return null;
   }
 
-  verifyToken(authHeader: string) {
+  async validateToken(authHeader: string) {
 
     if(validator.isEmpty(authHeader)) {
       throw new BadRequestException('Missing authorization header!');
@@ -54,7 +51,7 @@ export class AuthService {
     let token: Token = undefined;
 
     try {
-      token = this.jwtService.verify(tokenHeader);
+      token = await this.jwtService.verify(tokenHeader);
     }
     catch (e) {
       throw new UnauthorizedException('Unauthorized token!');
@@ -63,36 +60,27 @@ export class AuthService {
     if(validator.isEmpty(token)) {
       throw new BadRequestException('Missing token!');
     }
-    return token;
-  }
 
-  async validateToken(token: Token){
     const err = await validate(new Token(token));
     if(err.length > 0) {
       throw new UnauthorizedException('Unauthorized token structure!');
     }
-    if(token.loggedIn == true && token.salt == '' && token.saltExp == -1) {
-      return token;
-    }
-    else {
-      return null;
-    }
+
+    return token;
   }
 
-  assignTempToken(user: User) {
-    this.logger.debug(Config.token.secrets);
+  async assignTempToken(user: User) {
     return {
-      token: this.jwtService.sign({
+      token: await this.jwtService.signAsync({
         username: user.username,
         loggedIn: false,
         salt: RandomString.generate(128),
         saltExp: Date.now() + 5 * 60 * 1000})};
   }
 
-  assignToken(user: User) {
-    this.logger.debug(Config.token.secrets);
+  async assignToken(user: User) {
     return {
-      token: this.jwtService.sign({
+      token: await this.jwtService.signAsync({
         username: user.username,
         loggedIn: true,
         salt: '',
