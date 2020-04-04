@@ -5,10 +5,13 @@ import * as path from 'path';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 const Config = require(`../config/${process.env.NODE_ENV}`);
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   // use express as base framework for nest
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.use(helmet());
 
   // setup static content path
   app.useStaticAssets(path.join(__dirname, '..', Config.publicContent.folderName), {

@@ -1,6 +1,7 @@
 import { Controller, Get, Request, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { UsernameGuard } from './auth/guards/username.guard';
+import { LoginGuard } from './auth/guards/login.guard';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 @Controller()
 export class AppController {
@@ -9,19 +10,19 @@ export class AppController {
   @Post('login/username')
   @UseGuards(UsernameGuard)
   async authUsername(@Request() req) {
-    return req.user;
+    return req.token;
   }
 
-  @UseGuards(AuthGuard('jwtLogin'))
   @Post('login/auth')
+  @UseGuards(LoginGuard)
   async authCredentials(@Request() req) {
-    return req.user;
+    return req.token;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Request() req) {
+    return req.token;
   }
 
 }

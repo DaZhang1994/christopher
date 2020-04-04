@@ -32,20 +32,16 @@ export class UsernameGuard implements CanActivate {
           return Promise.reject(new BadRequestException('Invalid username!'));
         }
       }).
-      then(() => {
-        return this.authService.validateUsername(body.username);
-      }).
+      then(() => this.authService.validateUsername(body.username)).
       then(user => {
         if (!user) {
-          return Promise.reject(new UnauthorizedException('Unauthorized!'));
+          return Promise.reject(new UnauthorizedException('Unauthorized username!'));
         }
         return user;
       }).
-      then(user => {
-        return this.authService.assignTempToken(user)
-      }).
+      then(user => this.authService.assignTempToken(user)).
       then(token => {
-          req.user = token;
+          req.token = token;
           return resolve(true);
       }).
       catch(e => reject(e));
