@@ -5,8 +5,12 @@ import { BaseModel } from '../../common/models/base.model';
 @ObjectType()
 export class User extends BaseModel {
 
+  _id?: string;
+
   @Field({ nullable: true })
   username?: string;
+
+  password?: string;
 
   @IsEmail()
   @Field({ nullable: true })

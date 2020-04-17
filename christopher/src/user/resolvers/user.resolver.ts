@@ -1,11 +1,7 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Context, Query, Resolver } from '@nestjs/graphql';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
-import { IdentifierInput } from '../dtos/identifier.input';
-import { IdentifierValidator } from '../validators/identifier.validator';
-import { UseInterceptors } from '@nestjs/common';
-import { CacheInterceptor } from '../../common/interceptors/cache/cache.interceptor';
-import { Cache } from '../../common/decorators/cache.decorator';
+import { Token } from '../../common/decorators/token.decorator';
 
 @Resolver(_of => User)
 export class UserResolver {
@@ -13,10 +9,9 @@ export class UserResolver {
 
   }
 
+  @Token()
   @Query(_returns => User)
-  @UseInterceptors(CacheInterceptor)
-  @Cache('user', 5)
-  async user(@Args('identifier', IdentifierValidator) identifier: IdentifierInput) {
-    return await this.userService.findOne(identifier);
+  async user(@Context() context) {
+    return this.userService.findOne({ username: context.req.token.username });
   }
 }

@@ -1,5 +1,5 @@
-import { IsEmail, IsOptional } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
+import { IsEmail, IsOptional } from 'class-validator';
 
 @InputType()
 export class IdentifierInput {
@@ -18,7 +18,7 @@ export class IdentifierInput {
   @Field({ nullable: true })
   telephone?: string;
 
-  get identifier() {
+  get currIdentifier(): string {
     return this._id || this.username || this.email || this.telephone;
   }
 }

@@ -1,9 +1,9 @@
 import { CACHE_MANAGER, CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
+import * as rxjs from 'rxjs';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Reflector } from '@nestjs/core';
-import { CacheMeta } from '../../../auth/entities/cache.entity';
-import * as rxjs from 'rxjs';
+import { CacheMeta } from '../../../auth/entities/cache_meta.entity';
 
 @Injectable()
 export class CacheInterceptor implements NestInterceptor {
@@ -20,6 +20,7 @@ export class CacheInterceptor implements NestInterceptor {
     }
 
     const cacheData = await this.cacheManager.get(cacheMeta.key);
+
     if(cacheData) {
       return rxjs.of(cacheData);
     }
