@@ -1,4 +1,5 @@
 import { BaseModel } from '../models/base.model';
+import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
 
 export class BaseService<T extends BaseModel> {
@@ -18,11 +19,19 @@ export class BaseService<T extends BaseModel> {
   }
 
   async updateOne(oriModel: T, desModel: T) {
-    await this.CollectionModel.updateOne(oriModel, desModel);
+    return this.CollectionModel.findOneAndUpdate(oriModel, desModel);
   }
 
-  async deleteUser(model: T) {
+  async deleteOne(model: T) {
     return this.CollectionModel.deleteOne(model);
+  }
+
+  async findByIds(ids: string[]) {
+    return this.CollectionModel.find({_id: { $in: ids.map(id => mongoose.Types.ObjectId(id)) }});
+  }
+
+  async findAll() {
+    return this.CollectionModel.find({});
   }
 
 }

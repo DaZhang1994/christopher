@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Post } from './model/post';
 import { PostService } from './post.service';
-import { OrderedNestDataLoader } from 'nestjs-graphql-dataloader'
-import { async } from 'rxjs/internal/scheduler/async';
+import { OrderedNestDataLoader } from 'nestjs-graphql-dataloader';
 
 @Injectable()
 export class PostLoader extends OrderedNestDataLoader<number, Post> {
@@ -17,8 +16,9 @@ export class PostLoader extends OrderedNestDataLoader<number, Post> {
 
   protected getOptions = () => ({
     query: async (keys: number[]) => {
-      console.log(keys);
-      return await this.postService.findByIds(keys)
+      const res = await this.postService.findByIds(keys);
+      console.log(res);
+      return res;
     }
   })
 

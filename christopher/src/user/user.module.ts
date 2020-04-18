@@ -4,6 +4,7 @@ import { UserSchema } from './schemas/user.schema';
 import { UserService } from './services/user.service';
 import { UserResolver } from './resolvers/user.resolver';
 import { CommonModule } from '../common/common.module';
+import { ThreadModule } from '../thread/thread.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { CommonModule } from '../common/common.module';
       schema: UserSchema,
       collection: 'users'
     }]),
-    CommonModule
+    CommonModule,
+    ThreadModule
   ],
   providers: [UserService, UserResolver],
   exports: [UserService]
