@@ -6,7 +6,7 @@ export const ThreadSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
-  userIds: [
+  users: [
     {
       type: String,
       ref: 'User'

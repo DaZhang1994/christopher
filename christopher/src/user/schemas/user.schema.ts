@@ -50,7 +50,7 @@ export const UserSchema = new mongoose.Schema({
   status: {
     type: Number
   },
-  threadIds: [
+  threads: [
     {
       type: String,
       ref: 'Thread'

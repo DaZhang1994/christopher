@@ -50,8 +50,8 @@ export class UserResolver {
   }
 
   @ResolveField(_returns => [Thread])
-  async threads(@Parent() user: User, @Loader(ThreadLoader) threadLoader: DataLoader<string, Thread>) {
-    return (await threadLoader.loadMany(user.threadIds)).filter(thread => !(thread instanceof Error));
+  async threads(@Parent() user: User, @Loader(ThreadLoader) threadLoader: DataLoader<string | Thread, Thread>) {
+    return (await threadLoader.loadMany(user.threads)).filter(thread => !(thread instanceof Error));
   }
 
 }

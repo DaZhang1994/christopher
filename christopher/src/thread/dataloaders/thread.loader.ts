@@ -10,8 +10,8 @@ export class ThreadLoader extends OrderedNestDataLoader<string, Thread> {
   }
 
   protected getOptions = () => ({
-    query: async (threadIds: string[]) => {
-      return this.threadService.findByIds(threadIds);
+    query: async (threads: string[]) => {
+      return this.threadService.findByIds(threads);
     }
   })
 
