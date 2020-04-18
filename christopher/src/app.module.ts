@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AuthorModule } from './author/author.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from 'nestjs-graphql-dataloader';
 import { AuthModule } from './auth/auth.module';
@@ -32,7 +31,6 @@ const Config = require(`../config/${process.env.NODE_ENV}`);
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true }),
-    AuthorModule,
     AuthModule,
     UserModule,
     CommonModule,
