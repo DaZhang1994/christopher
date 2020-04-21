@@ -11,12 +11,16 @@ export class ThreadService extends BaseService<Thread>{
     super(ThreadModel);
   }
 
-  async initMeta(thread: Thread, authorId: string) {
+  async addThread(thread: Thread, authorId: string) {
     thread.author = authorId;
     thread.createdTime = new Date();
     thread.status = PostStatus.VALID;
-    return thread;
+    return this.addOne(thread);
   }
 
+  async updateThreadById(threadId: string, desThread: Thread) {
+    desThread.lastUpdateDate = new Date();
+    return this.updateById(threadId, desThread);
+  }
 
 }

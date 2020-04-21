@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BaseModel } from '../../common/models/base.model';
 import { IsDate, IsOptional, IsString, Matches } from 'class-validator';
 import { Post } from '../../post/models/post.model';
+import { User } from '../../user/models/user.model';
 
 
 @ObjectType()
@@ -28,10 +29,10 @@ export class Thread extends BaseModel {
   @IsOptional()
   createdTime?: Date;
 
-  @Field(_type => String, { nullable: true })
+  @Field(_type => User, { nullable: true })
   @IsString()
   @IsOptional()
-  author?: string;
+  author?: string | User;
 
   @Field(_type => Date, { nullable: true })
   @IsDate()

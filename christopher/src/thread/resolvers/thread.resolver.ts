@@ -6,6 +6,10 @@ import { AddThreadArgs } from '../args/add_thread.args';
 import { Post } from '../../post/models/post.model';
 import { UseInterceptors } from '@nestjs/common';
 import { AllPostLoaderInterceptor } from '../dataloaders/all_post.loader';
+import { User } from '../../user/models/user.model';
+import { Loader } from 'nestjs-graphql-dataloader';
+import DataLoader from 'dataloader';
+import { UserLoader } from '../dataloaders/user.loder';
 
 
 @Resolver(_of => Thread)
@@ -17,8 +21,7 @@ export class ThreadResolver {
   // @Admin()
   @Mutation(_returns => Boolean)
   async addThread(@Args() threadArgs: AddThreadArgs, @Context() context: any) {
-    const thread: Thread = await this.threadService.initMeta(threadArgs, context.req.token._id);
-    await this.threadService.addOne(thread);
+    await this.threadService.addThread(threadArgs, context.req.token._id);
     return true;
   }
 
@@ -32,7 +35,7 @@ export class ThreadResolver {
   // @Admin()
   @Mutation(_returns => Boolean)
   async updateThread(@Args() threadArgs: UpdateThreadArgs) {
-    await this.threadService.updateById(threadArgs.threadId, threadArgs.desThread);
+    await this.threadService.updateThreadById(threadArgs.threadId, threadArgs.desThread);
     return true;
   }
 
@@ -51,6 +54,11 @@ export class ThreadResolver {
   async posts(@Parent() thread: Thread, @Context() context: any) {
     await context.req.batchLoadPosts();
     return context.req.refMap.get(thread._id.toString());
+  }
+
+  @ResolveField(_returns => User)
+  async author(@Parent() thread: Thread, @Loader(UserLoader) userLoader: DataLoader<string, User>) {
+    return userLoader.load(thread.author.toString());
   }
 
 }

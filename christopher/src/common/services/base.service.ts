@@ -60,7 +60,7 @@ export class BaseService<T extends BaseModel> {
     return this.CollectionModel.aggregate([
       { $match: {
           [groupBy]: { $in: _ids.map(id => mongoose.Types.ObjectId(id)) }
-  }
+        }
       },
       { $group: {
           _id: `$${groupBy}`,
