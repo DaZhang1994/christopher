@@ -1,7 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { BaseService } from './services/base.service';
 import * as RedisStore from 'cache-manager-redis-store';
-import { CacheInterceptor } from './interceptors/cache/cache.interceptor';
 import { JwtModule } from '@nestjs/jwt';
 import { TokenService } from './services/token.service.';
 
@@ -20,7 +19,7 @@ const Config = require(`../../config/${process.env.NODE_ENV}`);
       password: Config.cache.password
     }),
   ],
-  providers: [BaseService, CacheInterceptor, TokenService],
-  exports: [BaseService, CacheInterceptor, TokenService, JwtModule, CacheModule]
+  providers: [BaseService, TokenService],
+  exports: [BaseService, TokenService, JwtModule, CacheModule]
 })
 export class CommonModule {}

@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TokenInterceptor } from './common/interceptors/token/token.interceptor';
 import { CommonModule } from './common/common.module';
 import { ThreadModule } from './thread/thread.module';
+import { PostModule } from './post/post.module';
 
 const Config = require(`../config/${process.env.NODE_ENV}`);
 
@@ -34,7 +35,8 @@ const Config = require(`../config/${process.env.NODE_ENV}`);
     AuthModule,
     UserModule,
     CommonModule,
-    ThreadModule
+    ThreadModule,
+    PostModule
   ],
   providers: [
     { provide: APP_INTERCEPTOR,

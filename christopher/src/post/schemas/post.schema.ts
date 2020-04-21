@@ -1,55 +1,32 @@
 import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import { BadRequestException, ConflictException } from '@nestjs/common';
+import { User } from '../../user/models/user.model';
 
-export const UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    unique: true,
-    match: /^[A-Za-z_]\w{5,15}$/
-  },
-  password: {
-    type: String,
-    match: /[a-fA-F0-9]{32}/
-  },
-  email: {
-    type: String,
-    unique: true,
-    match: /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/
-  },
-  telephone: {
-    type: String,
-    unique: true
-  },
-  firstName: {
-    type: String,
-  },
-  lastName: {
+export const PostSchema = new mongoose.Schema({
+  title: {
     type: String
   },
-  emailVerified: {
-    type: Boolean
-  },
-  telephoneVerified: {
-    type: Boolean
-  },
-  role: {
-    type: Number
-  },
-  avatarURI: {
+  content: {
     type: String
-  },
-  createdTime: {
-    type: Date
-  },
-  lastLoginIP: {
-    type: String
-  },
-  lastLoginTime: {
-    type: Date
   },
   status: {
     type: Number
   },
+  createdTime: {
+    type: Date
+  },
+  lastUpdateTime: {
+    type: Date
+  },
+  thread: {
+      type: Schema.Types.ObjectId,
+      ref: 'Thread'
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 }, {
   versionKey: false
 })

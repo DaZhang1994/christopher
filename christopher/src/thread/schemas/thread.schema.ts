@@ -1,17 +1,25 @@
 import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 
 export const ThreadSchema = new mongoose.Schema({
-  name: {
+  subject: {
     type: String,
     unique: true
   },
-  users: [
-    {
-      type: String,
-      ref: 'User'
-    }
-  ]
+  status: {
+    type: Number
+  },
+  createdTime: {
+    type: Date
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  lastUpdateTime: {
+    type: Date
+  }
 })
   .pre('findOneAndUpdate', function(next) {
     this.setOptions({ runValidators: true, new: true, useFindAndModify: false});

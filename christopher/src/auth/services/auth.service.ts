@@ -37,7 +37,7 @@ export class AuthService {
 
     await this.cacheManager.del(user.username);
 
-    return this.tokenService.generateAsync(user.username);
+    return this.tokenService.generateAsync(user);
   }
 
   async assignLoginToken(identifier: IdentifierInput): Promise<string> {

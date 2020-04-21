@@ -1,6 +1,7 @@
 import { Token } from '../entities/token.entity';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../../user/models/user.model';
 
 @Injectable()
 export class TokenService {
@@ -9,12 +10,12 @@ export class TokenService {
 
   }
 
-  async generateAsync(username: string): Promise<string> {
-    return this.jwtService.signAsync({ username: username } );
+  async generateAsync(user: User): Promise<string> {
+    return this.jwtService.signAsync({ username: user.username, _id: user._id } );
   }
 
-  generate(username: string): string {
-    return this.jwtService.sign({ username: username } );
+  generate(user: User): string {
+    return this.jwtService.sign({ username: user.username, _id: user._id } );
   }
 
   async parseAsync(token: string): Promise<Token> {

@@ -55,7 +55,7 @@ export class TokenInterceptor implements NestInterceptor {
     // set token to request field according to decorator @param(reqTokenField)
     request[reqTokenField] = parsedToken;
 
-    response.setHeader('authorization', await this.tokenService.generateAsync(parsedToken.username));
+    response.setHeader('authorization', await this.tokenService.generateAsync(parsedToken));
 
     return next.handle();
   }

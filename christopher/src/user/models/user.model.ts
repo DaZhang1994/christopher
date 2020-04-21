@@ -12,11 +12,11 @@ import {
   Matches,
 } from 'class-validator';
 import { BaseModel } from '../../common/models/base.model';
-import { Thread } from '../../thread/models/thread.model';
 
 @ObjectType()
 export class User extends BaseModel {
 
+  @Field(_type => String, { nullable: true })
   @Matches(/^[0-9a-fA-F]{24}$/)
   @IsString()
   @IsOptional()
@@ -75,7 +75,7 @@ export class User extends BaseModel {
   @IsOptional()
   avatarURI?: string;
 
-  @Field({ nullable: true })
+  @Field(_type => Date, { nullable: true })
   @IsDate()
   @IsOptional()
   createdTime?: Date;
@@ -94,8 +94,5 @@ export class User extends BaseModel {
   @IsInt()
   @IsOptional()
   status?: number;
-
-  @Field(_type => [Thread], { nullable: true})
-  threads?: (string | Thread)[];
 
 }

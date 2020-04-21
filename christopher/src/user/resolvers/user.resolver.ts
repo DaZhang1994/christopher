@@ -1,14 +1,10 @@
-import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { Token } from '../../common/decorators/token.decorator';
 import { AddUserArgs } from '../args/add_user.args';
 import { UpdateUserArgs } from '../args/update_user.args';
 import { TokenService } from '../../common/services/token.service.';
-import { Loader } from 'nestjs-graphql-dataloader';
-import { Thread } from '../../thread/models/thread.model';
-import { ThreadLoader } from '../../thread/dataloaders/thread.loader';
-import DataLoader from 'dataloader';
 
 @Resolver(_of => User)
 export class UserResolver {
@@ -40,18 +36,13 @@ export class UserResolver {
   @Mutation(_returns => Boolean)
   async updateUser(@Context() context: any, @Args() updateUserArgs: UpdateUserArgs) {
     const updatedUser: User = await this.userService.updateOne({ username: context.req.token.username }, updateUserArgs);
-    context.res.setHeader('authorization', await this.tokenService.generateAsync(updatedUser.username));
+    context.res.setHeader('authorization', await this.tokenService.generateAsync(updatedUser));
     return true;
   }
 
   @Query(_returns => [User])
   async users() {
     return this.userService.findAll();
-  }
-
-  @ResolveField(_returns => [Thread])
-  async threads(@Parent() user: User, @Loader(ThreadLoader) threadLoader: DataLoader<string | Thread, Thread>) {
-    return (await threadLoader.loadMany(user.threads)).filter(thread => !(thread instanceof Error));
   }
 
 }

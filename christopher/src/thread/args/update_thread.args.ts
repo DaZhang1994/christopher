@@ -5,9 +5,8 @@ import { ValidateNested } from 'class-validator';
 @ArgsType()
 export class UpdateThreadArgs {
 
-  @Field(_type => ThreadInput)
-  @ValidateNested()
-  oriThread: ThreadInput;
+  @Field(_type => String)
+  threadId: string;
 
   @Field(_type => ThreadInput)
   @ValidateNested()
