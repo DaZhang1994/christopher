@@ -16,7 +16,7 @@ export class UserResolver {
   @Token()
   @Query(_returns => User)
   async user(@Context() context) {
-    return this.userService.findOne({ username: context.req.token.username });
+    return this.userService.findById(context.req.token._id);
   }
 
   @Mutation(_returns => Boolean)
@@ -28,14 +28,14 @@ export class UserResolver {
   @Token()
   @Mutation(_returns => Boolean)
   async deleteUser(@Context() context: any) {
-    await this.userService.deleteOne({ username: context.req.token.username });
+    await this.userService.deleteById(context.req.token._id);
     return true;
   }
 
   @Token()
   @Mutation(_returns => Boolean)
   async updateUser(@Context() context: any, @Args() updateUserArgs: UpdateUserArgs) {
-    const updatedUser: User = await this.userService.updateOne({ username: context.req.token.username }, updateUserArgs);
+    const updatedUser: User = await this.userService.updateById(context.req.token._id , updateUserArgs);
     context.res.setHeader('authorization', await this.tokenService.generateAsync(updatedUser));
     return true;
   }

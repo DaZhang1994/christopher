@@ -4,17 +4,16 @@ import { Thread } from '../models/thread.model';
 import { ThreadService } from '../services/thread.service';
 import { AddThreadArgs } from '../args/add_thread.args';
 import { Post } from '../../post/models/post.model';
-import { UseInterceptors } from '@nestjs/common';
-import { AllPostLoaderInterceptor } from '../dataloaders/all_post.loader';
 import { User } from '../../user/models/user.model';
 import { Loader } from 'nestjs-graphql-dataloader';
 import DataLoader from 'dataloader';
 import { UserLoader } from '../dataloaders/user.loder';
+import { PostLoader } from '../dataloaders/post.loader';
 
 
 @Resolver(_of => Thread)
 export class ThreadResolver {
-  constructor(private readonly threadService: ThreadService) {
+  constructor(private readonly threadService: ThreadService, private readonly postLoader: PostLoader) {
 
   }
 
@@ -45,15 +44,13 @@ export class ThreadResolver {
   }
 
   @Query(_returns => [Thread])
-  @UseInterceptors(AllPostLoaderInterceptor)
   async threads(@Context() context: any) {
     return this.threadService.findAll();
   }
 
   @ResolveField(_returns => [Post])
   async posts(@Parent() thread: Thread, @Context() context: any) {
-    await context.req.batchLoadPosts();
-    return context.req.refMap.get(thread._id.toString());
+    return this.postLoader.load(thread._id.toString(), context.req);
   }
 
   @ResolveField(_returns => User)

@@ -17,6 +17,7 @@ const Config = require(`../config/${process.env.NODE_ENV}`);
   imports: [
     GraphQLModule.forRoot({
       context: ({ req, res }) => ({ req, res }),
+      fieldResolverEnhancers: ['guards', 'interceptors'],
       installSubscriptionHandlers: true,
       autoSchemaFile: true,
       debug: true,

@@ -10,6 +10,10 @@ export class BaseService<T extends BaseModel> {
     this.CollectionModel = CollectionModel;
   }
 
+  async findByField(field: string, fieldValue: any) {
+    return this.CollectionModel.find({ [field]: fieldValue} );
+  }
+
   async findOne(model: T): Promise<T> {
     return this.CollectionModel.findOne(model);
   }

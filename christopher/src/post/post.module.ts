@@ -5,6 +5,9 @@ import { PostSchema } from './schemas/post.schema';
 import { PostService } from './services/post.service';
 import { UserModule } from '../user/user.module';
 import { PostResolver } from './resolvers/post.resolver';
+import { ThreadModule } from '../thread/thread.module';
+import { ThreadLoader } from './dataloaders/thread.loader';
+import { UserLoader } from './dataloaders/user.loader';
 
 @Module({
   imports: [
@@ -14,9 +17,10 @@ import { PostResolver } from './resolvers/post.resolver';
       collection: 'posts'
     }]),
     CommonModule,
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule),
+    forwardRef(() => ThreadModule)
   ],
-  providers: [PostService, PostResolver],
+  providers: [PostService, PostResolver, ThreadLoader, UserLoader],
   exports: [PostService]
 })
 export class PostModule {}

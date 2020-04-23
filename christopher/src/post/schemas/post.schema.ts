@@ -2,34 +2,41 @@ import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { User } from '../../user/models/user.model';
+import { PostStatus } from '../constants/status.constant';
 
 export const PostSchema = new mongoose.Schema({
   title: {
-    type: String
+    type: String,
+    required: true
   },
   content: {
-    type: String
+    type: String,
+    required: true
   },
   status: {
-    type: Number
+    type: Number,
+    default: PostStatus.VALID
   },
   createdTime: {
-    type: Date
+    type: Date,
+    default: new Date()
   },
   lastUpdateTime: {
     type: Date
   },
   thread: {
-      type: Schema.Types.ObjectId,
-      ref: 'Thread'
+    type: Schema.Types.ObjectId,
+    ref: 'Thread',
+    required: true
   },
   author: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   }
 }, {
   versionKey: false
-})
+  })
   .pre('findOneAndUpdate', function(next) {
     this.setOptions({ runValidators: true, new: true, useFindAndModify: false});
     next();

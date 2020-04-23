@@ -1,17 +1,21 @@
 import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { BadRequestException, ConflictException } from '@nestjs/common';
+import { ThreadStatus } from '../constants/status.constant';
 
 export const ThreadSchema = new mongoose.Schema({
   subject: {
     type: String,
-    unique: true
+    unique: true,
+    required: true
   },
   status: {
-    type: Number
+    type: Number,
+    default: ThreadStatus.VALID
   },
   createdTime: {
-    type: Date
+    type: Date,
+    default: new Date()
   },
   author: {
     type: Schema.Types.ObjectId,
@@ -20,7 +24,9 @@ export const ThreadSchema = new mongoose.Schema({
   lastUpdateTime: {
     type: Date
   }
-})
+}, {
+    versionKey: false
+  })
   .pre('findOneAndUpdate', function(next) {
     this.setOptions({ runValidators: true, new: true, useFindAndModify: false});
     next();
@@ -28,7 +34,7 @@ export const ThreadSchema = new mongoose.Schema({
   .post('save', (error, doc, next) => {
     if('MongoError' === error.name) {
       if(error.code === 11000) {
-        throw new ConflictException('Duplicated Thread identifier!');
+        throw new ConflictException('Duplicated user identifier!');
       }
     }
     if('ValidationError' === error.name) {

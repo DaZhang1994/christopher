@@ -7,6 +7,8 @@ import { ThreadResolver } from './resolvers/thread.resolver';
 import { PostModule } from '../post/post.module';
 import { UserLoader } from './dataloaders/user.loder';
 import { UserModule } from '../user/user.module';
+import { PostLoader } from './dataloaders/post.loader';
+
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => PostModule),
     forwardRef(() => UserModule)
   ],
-  providers: [ThreadService, ThreadResolver, UserLoader],
+  providers: [ThreadService, ThreadResolver, UserLoader, PostLoader],
   exports: [ThreadService]
 })
 export class ThreadModule {}
