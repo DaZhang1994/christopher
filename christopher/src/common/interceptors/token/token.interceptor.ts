@@ -49,6 +49,7 @@ export class TokenInterceptor implements NestInterceptor {
       parsedToken = await this.tokenService.parseAsync(token);
     }
     catch (e) {
+      console.log(e)
       throw new UnauthorizedException('Unauthorized token!')
     }
 

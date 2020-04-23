@@ -11,7 +11,7 @@ export class BaseService<T extends BaseModel> {
   }
 
   async findByField(field: string, fieldValue: any) {
-    return this.CollectionModel.find({ [field]: fieldValue} );
+    return this.CollectionModel.find({ [field]: fieldValue } );
   }
 
   async findOne(model: T): Promise<T> {

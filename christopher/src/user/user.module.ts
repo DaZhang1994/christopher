@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './schemas/user.schema';
 import { UserService } from './services/user.service';
 import { UserResolver } from './resolvers/user.resolver';
 import { CommonModule } from '../common/common.module';
+import { PostLoader } from './dataloaders/post.loader';
+import { PostModule } from '../post/post.module';
 
 @Module({
   imports: [
@@ -12,9 +14,10 @@ import { CommonModule } from '../common/common.module';
       schema: UserSchema,
       collection: 'users'
     }]),
-    CommonModule
+    CommonModule,
+    forwardRef(() => PostModule)
   ],
-  providers: [UserService, UserResolver],
+  providers: [UserService, UserResolver, PostLoader],
   exports: [UserService]
 })
 export class UserModule {}

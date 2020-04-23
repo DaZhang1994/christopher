@@ -12,6 +12,7 @@ import {
   Matches,
 } from 'class-validator';
 import { BaseModel } from '../../common/models/base.model';
+import { Post } from '../../post/models/post.model';
 
 @ObjectType()
 export class User extends BaseModel {
@@ -94,5 +95,9 @@ export class User extends BaseModel {
   @IsInt()
   @IsOptional()
   status?: number;
+
+  @Field(_type => [Post], { nullable: true })
+  posts?: Post[];
+
 
 }

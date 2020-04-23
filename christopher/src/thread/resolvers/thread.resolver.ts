@@ -10,7 +10,6 @@ import DataLoader from 'dataloader';
 import { UserLoader } from '../dataloaders/user.loder';
 import { PostLoader } from '../dataloaders/post.loader';
 
-
 @Resolver(_of => Thread)
 export class ThreadResolver {
   constructor(private readonly threadService: ThreadService, private readonly postLoader: PostLoader) {

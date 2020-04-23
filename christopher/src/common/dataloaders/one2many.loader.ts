@@ -1,5 +1,5 @@
-import { BaseService } from '../../common/services/base.service';
-import { BaseModel } from '../../common/models/base.model';
+import { BaseService } from '../services/base.service';
+import { BaseModel } from '../models/base.model';
 
 export class One2ManyLoader<T extends BaseModel> {
 

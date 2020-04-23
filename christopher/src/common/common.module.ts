@@ -10,7 +10,7 @@ const Config = require(`../../config/${process.env.NODE_ENV}`);
   imports: [
     JwtModule.register({
       secretOrKeyProvider: () => Config.token.secrets,
-      signOptions: { expiresIn: '24h' }
+      signOptions: { expiresIn: '1d' }
     }),
     CacheModule.register({
       store: RedisStore,

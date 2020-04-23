@@ -1,15 +1,19 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { Token } from '../../common/decorators/token.decorator';
 import { AddUserArgs } from '../args/add_user.args';
 import { UpdateUserArgs } from '../args/update_user.args';
 import { TokenService } from '../../common/services/token.service.';
+import { PostLoader } from '../dataloaders/post.loader';
+import { Post } from '../../post/models/post.model';
+
 
 @Resolver(_of => User)
 export class UserResolver {
   constructor(private readonly userService: UserService,
-              private readonly tokenService: TokenService) {
+              private readonly tokenService: TokenService,
+              private readonly postLoader: PostLoader) {
 
   }
 
@@ -43,6 +47,11 @@ export class UserResolver {
   @Query(_returns => [User])
   async users() {
     return this.userService.findAll();
+  }
+
+  @ResolveField(_returns => [Post])
+  async posts(@Context() context: any) {
+    return this.postLoader.load(context.req.token._id, context.req);
   }
 
 }

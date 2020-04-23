@@ -9,11 +9,11 @@ export class PostLoader extends One2ManyLoader<Post> {
   constructor(private readonly postService: PostService) {
     super(
       postService,
-      'thread2PostSet',
-      'thread2PostMap',
-      'thread',
-      'thread2PostBatch',
-      'thread2PostMutex');
+      'user2PostSet',
+      'user2PostMap',
+      'author',
+      'user2PostBatch',
+      'user2PostMutex');
   }
 
 }
