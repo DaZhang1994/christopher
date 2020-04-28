@@ -7,6 +7,8 @@ import { UpdateUserArgs } from '../args/update_user.args';
 import { TokenService } from '../../common/services/token.service.';
 import { PostLoader } from '../dataloaders/post.loader';
 import { Post } from '../../post/models/post.model';
+import { Role } from '../../common/decorators/role.decorator';
+import { UserRole } from '../constants/role.constant';
 
 
 @Resolver(_of => User)
@@ -29,6 +31,7 @@ export class UserResolver {
     return true;
   }
 
+  @Role(UserRole.ADMIN)
   @Token()
   @Mutation(_returns => Boolean)
   async deleteUser(@Context() context: any) {
@@ -44,6 +47,7 @@ export class UserResolver {
     return true;
   }
 
+  @Role(UserRole.ADMIN)
   @Query(_returns => [User])
   async users() {
     return this.userService.findAll();

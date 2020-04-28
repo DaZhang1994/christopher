@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
+import { UserRole } from '../../user/constants/role.constant';
 
 export class Token {
 
@@ -10,6 +11,10 @@ export class Token {
   @IsString()
   @IsNotEmpty()
   _id: string;
+
+  @IsEnum(UserRole)
+  @IsNotEmpty()
+  role: UserRole;
 
   @IsNumber()
   @IsNotEmpty()

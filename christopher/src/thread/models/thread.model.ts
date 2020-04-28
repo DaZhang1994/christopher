@@ -1,8 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BaseModel } from '../../common/models/base.model';
-import { IsDate, IsOptional, IsString, Matches } from 'class-validator';
+import { IsDate, IsEnum, IsOptional, IsString, Matches } from 'class-validator';
 import { Post } from '../../post/models/post.model';
 import { User } from '../../user/models/user.model';
+import { ThreadStatus } from '../constants/status.constant';
 
 
 @ObjectType()
@@ -20,9 +21,9 @@ export class Thread extends BaseModel {
   subject?: string;
 
   @Field(_type => Int, { nullable: true })
-  @IsString()
+  @IsEnum(ThreadStatus)
   @IsOptional()
-  status?: number;
+  status?: ThreadStatus;
 
   @Field(_type => Date, { nullable: true })
   @IsDate()

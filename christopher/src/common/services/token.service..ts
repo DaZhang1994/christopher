@@ -11,11 +11,11 @@ export class TokenService {
   }
 
   async generateAsync(user: User): Promise<string> {
-    return this.jwtService.signAsync({ username: user.username, _id: user._id } );
+    return this.jwtService.signAsync({ username: user.username, _id: user._id, role: user.role } );
   }
 
   generate(user: User): string {
-    return this.jwtService.sign({ username: user.username, _id: user._id } );
+    return this.jwtService.sign({ username: user.username, _id: user._id, role: user.role } );
   }
 
   async parseAsync(token: string): Promise<Token> {

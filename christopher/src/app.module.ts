@@ -5,10 +5,11 @@ import { DataLoaderInterceptor } from 'nestjs-graphql-dataloader';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TokenInterceptor } from './common/interceptors/token/token.interceptor';
+import { TokenInterceptor } from './common/interceptors/token.interceptor';
 import { CommonModule } from './common/common.module';
 import { ThreadModule } from './thread/thread.module';
 import { PostModule } from './post/post.module';
+import { RoleInterceptor } from './common/interceptors/role.interceptor';
 
 const Config = require(`../config/${process.env.NODE_ENV}`);
 
@@ -43,6 +44,8 @@ const Config = require(`../config/${process.env.NODE_ENV}`);
     { provide: APP_INTERCEPTOR,
       useClass: DataLoaderInterceptor },
     { provide: APP_INTERCEPTOR,
-      useClass: TokenInterceptor }]
+      useClass: TokenInterceptor },
+    { provide: APP_INTERCEPTOR,
+      useClass: RoleInterceptor }]
 })
 export class AppModule {}

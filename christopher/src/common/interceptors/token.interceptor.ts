@@ -9,9 +9,10 @@ import {
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { Token } from '../../entities/token.entity';
-import { TokenService } from '../../services/token.service.';
+import { Token } from '../entities/token.entity';
+import { TokenService } from '../services/token.service.';
 import { IncomingMessage, OutgoingMessage } from 'http';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class TokenInterceptor implements NestInterceptor {
@@ -47,9 +48,9 @@ export class TokenInterceptor implements NestInterceptor {
     let parsedToken: Token;
     try {
       parsedToken = await this.tokenService.parseAsync(token);
+      parsedToken = plainToClass(Token, parsedToken);
     }
     catch (e) {
-      console.log(e)
       throw new UnauthorizedException('Unauthorized token!')
     }
 

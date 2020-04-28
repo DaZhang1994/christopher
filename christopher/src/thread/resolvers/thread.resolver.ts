@@ -9,6 +9,9 @@ import { Loader } from 'nestjs-graphql-dataloader';
 import DataLoader from 'dataloader';
 import { UserLoader } from '../dataloaders/user.loder';
 import { PostLoader } from '../dataloaders/post.loader';
+import { Role } from '../../common/decorators/role.decorator';
+import { UserRole } from '../../user/constants/role.constant';
+import { Token } from '../../common/decorators/token.decorator';
 
 @Resolver(_of => Thread)
 export class ThreadResolver {
@@ -16,21 +19,24 @@ export class ThreadResolver {
 
   }
 
-  // @Admin()
+  @Role(UserRole.ADMIN)
+  @Token()
   @Mutation(_returns => Boolean)
   async addThread(@Args() threadArgs: AddThreadArgs, @Context() context: any) {
     await this.threadService.addThread(threadArgs, context.req.token._id);
     return true;
   }
 
-  // @Admin()
+  @Role(UserRole.ADMIN)
+  @Token()
   @Mutation(_returns => Boolean)
   async deleteThread(@Args('threadId') threadId: string) {
     await this.threadService.deleteById(threadId);
     return true;
   }
 
-  // @Admin()
+  @Role(UserRole.ADMIN)
+  @Token()
   @Mutation(_returns => Boolean)
   async updateThread(@Args() threadArgs: UpdateThreadArgs) {
     await this.threadService.updateThreadById(threadArgs.threadId, threadArgs.desThread);
@@ -54,7 +60,14 @@ export class ThreadResolver {
 
   @ResolveField(_returns => User)
   async author(@Parent() thread: Thread, @Loader(UserLoader) userLoader: DataLoader<string, User>) {
-    return userLoader.load(thread.author.toString());
+    let author = null;
+    try {
+      author = await userLoader.load(thread.author.toString());
+    }
+    catch(e) {
+      return null;
+    }
+    return author;
   }
 
 }

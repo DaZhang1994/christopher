@@ -3,7 +3,7 @@ import {
   IsBoolean,
   IsDate,
   IsEmail,
-  IsInt,
+  IsEnum,
   IsIP,
   IsOptional,
   IsPhoneNumber,
@@ -13,6 +13,8 @@ import {
 } from 'class-validator';
 import { BaseModel } from '../../common/models/base.model';
 import { Post } from '../../post/models/post.model';
+import { UserRole } from '../constants/role.constant';
+import { UserStatus } from '../constants/status.constant';
 
 @ObjectType()
 export class User extends BaseModel {
@@ -67,9 +69,9 @@ export class User extends BaseModel {
   telephoneVerified?: boolean;
 
   @Field(_type => Int, { nullable: true })
-  @IsInt()
+  @IsEnum(UserRole)
   @IsOptional()
-  role?: number;
+  role?: UserRole;
 
   @Field(_type => String, { nullable: true })
   @IsUrl()
@@ -92,9 +94,9 @@ export class User extends BaseModel {
   lastLoginTime?: Date;
 
   @Field(_type => Int, { nullable: true })
-  @IsInt()
+  @IsEnum(UserStatus)
   @IsOptional()
-  status?: number;
+  status?: UserStatus;
 
   @Field(_type => [Post], { nullable: true })
   posts?: Post[];

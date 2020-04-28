@@ -46,12 +46,26 @@ export class PostResolver {
 
   @ResolveField(_returns => User)
   async author(@Parent() post: Post, @Loader(UserLoader) userLoader: DataLoader<string, User>) {
-    return userLoader.load(post.author.toString());
+    let author = null;
+    try {
+      author = await userLoader.load(post.author.toString());
+    }
+    catch(e) {
+      return null;
+    }
+    return author;
   }
 
   @ResolveField(_returns => Thread)
   async thread(@Parent() post: Post, @Loader(ThreadLoader) threadLoader: DataLoader<string, Thread>) {
-    return threadLoader.load(post.thread.toString());
+    let thread = null;
+    try {
+      thread = await threadLoader.load(post.thread.toString());
+    }
+    catch(e) {
+      return null;
+    }
+    return thread;
   }
 
 }

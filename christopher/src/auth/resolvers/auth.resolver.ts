@@ -1,10 +1,9 @@
 import { AuthService } from '../services/auth.service';
-import { Auth } from '../models/auth.model';
 import { AuthArgs } from '../dtos/auth.args';
 import { IdentifierInput } from '../../common/dtos/identifier.input';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
-@Resolver(_of => Auth)
+@Resolver(_of => String)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {
 
