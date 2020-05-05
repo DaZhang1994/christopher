@@ -5,9 +5,6 @@ import { IsEmail, IsOptional } from 'class-validator';
 export class IdentifierInput {
 
   @Field({ nullable: true })
-  _id?: string;
-
-  @Field({ nullable: true })
   username?: string;
 
   @Field({ nullable: true })
@@ -19,6 +16,6 @@ export class IdentifierInput {
   telephone?: string;
 
   get currIdentifier(): string {
-    return this._id || this.username || this.email || this.telephone;
+    return this.username || this.email || this.telephone;
   }
 }

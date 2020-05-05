@@ -10,6 +10,7 @@ import { CommonModule } from './common/common.module';
 import { ThreadModule } from './thread/thread.module';
 import { PostModule } from './post/post.module';
 import { RoleInterceptor } from './common/interceptors/role.interceptor';
+import { RefreshTokenInterceptor } from './common/interceptors/refresh_token.interceptor';
 
 const Config = require(`../config/${process.env.NODE_ENV}`);
 
@@ -45,6 +46,8 @@ const Config = require(`../config/${process.env.NODE_ENV}`);
       useClass: DataLoaderInterceptor },
     { provide: APP_INTERCEPTOR,
       useClass: TokenInterceptor },
+    { provide: APP_INTERCEPTOR,
+      useClass: RefreshTokenInterceptor },
     { provide: APP_INTERCEPTOR,
       useClass: RoleInterceptor }]
 })

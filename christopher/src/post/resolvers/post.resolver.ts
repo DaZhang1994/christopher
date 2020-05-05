@@ -10,12 +10,18 @@ import { UserLoader } from '../dataloaders/user.loader';
 import { AddPostArgs } from '../args/add_post.args';
 import { Thread } from '../../thread/models/thread.model';
 import { ThreadLoader } from '../dataloaders/thread.loader';
+import { RefreshToken } from '../../common/decorators/refresh_token.decorator';
 
 
 @Resolver(_of => Post)
 export class PostResolver {
   constructor(private readonly postService: PostService) {
 
+  }
+
+  @Query(_returns => Post)
+  async post(@Args('postId') postId: string): Promise<Post> {
+    return await this.postService.findById(postId) || {};
   }
 
   @Token()
@@ -39,9 +45,10 @@ export class PostResolver {
     return true;
   }
 
+  @RefreshToken()
   @Query(_returns => [Post])
   async posts(): Promise<Post[]> {
-    return this.postService.findAll();
+    return await this.postService.findAll() || [];
   }
 
   @ResolveField(_returns => User)

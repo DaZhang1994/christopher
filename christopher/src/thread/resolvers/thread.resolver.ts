@@ -12,6 +12,7 @@ import { PostLoader } from '../dataloaders/post.loader';
 import { Role } from '../../common/decorators/role.decorator';
 import { UserRole } from '../../user/constants/role.constant';
 import { Token } from '../../common/decorators/token.decorator';
+import { RefreshToken } from '../../common/decorators/refresh_token.decorator';
 
 @Resolver(_of => Thread)
 export class ThreadResolver {
@@ -43,14 +44,16 @@ export class ThreadResolver {
     return true;
   }
 
+  @RefreshToken()
   @Query(_returns => Thread)
   async thread(@Args('threadId') threadId: string) {
-    return this.threadService.findById(threadId);
+    return await this.threadService.findById(threadId) || {};
   }
 
+  @RefreshToken()
   @Query(_returns => [Thread])
   async threads(@Context() context: any) {
-    return this.threadService.findAll();
+    return await this.threadService.findAll() || [];
   }
 
   @ResolveField(_returns => [Post])

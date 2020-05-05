@@ -12,7 +12,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { Token } from '../entities/token.entity';
 import { TokenService } from '../services/token.service.';
 import { IncomingMessage, OutgoingMessage } from 'http';
-import { plainToClass } from 'class-transformer';
+import { transformAndValidateSync } from 'class-transformer-validator';
 
 @Injectable()
 export class TokenInterceptor implements NestInterceptor {
@@ -48,7 +48,7 @@ export class TokenInterceptor implements NestInterceptor {
     let parsedToken: Token;
     try {
       parsedToken = await this.tokenService.parseAsync(token);
-      parsedToken = plainToClass(Token, parsedToken);
+      parsedToken = await transformAndValidateSync(Token, parsedToken);
     }
     catch (e) {
       throw new UnauthorizedException('Unauthorized token!')

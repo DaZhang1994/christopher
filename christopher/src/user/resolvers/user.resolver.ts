@@ -9,6 +9,7 @@ import { PostLoader } from '../dataloaders/post.loader';
 import { Post } from '../../post/models/post.model';
 import { Role } from '../../common/decorators/role.decorator';
 import { UserRole } from '../constants/role.constant';
+import { IdentifierInput } from '../../common/dtos/identifier.input';
 
 
 @Resolver(_of => User)
@@ -21,8 +22,13 @@ export class UserResolver {
 
   @Token()
   @Query(_returns => User)
-  async user(@Context() context) {
-    return this.userService.findById(context.req.token._id);
+  async profile(@Context() context) {
+    return await this.userService.findById(context.req.token._id) || {};
+  }
+
+  @Query(_returns => User)
+  async userProfile(@Args('identifier') identifier: IdentifierInput) {
+    return await this.userService.findOne(identifier) || {};
   }
 
   @Mutation(_returns => Boolean)
@@ -49,8 +55,8 @@ export class UserResolver {
 
   @Role(UserRole.ADMIN)
   @Query(_returns => [User])
-  async users() {
-    return this.userService.findAll();
+  async users(): Promise<User[]> {
+    return await this.userService.findAll() || [];
   }
 
   @ResolveField(_returns => [Post])

@@ -31,7 +31,7 @@ export class AuthService {
       throw new BadRequestException('No login token!');
     }
 
-    if(authArgs.password != await Base64.stringify(hmacSHA256(user.password, loginToken))) {
+    if(authArgs.password != Base64.stringify(hmacSHA256(user.password, loginToken))) {
       throw new UnauthorizedException('Unauthorized identifier and password!')
     }
 
@@ -51,7 +51,7 @@ export class AuthService {
 
     this.cacheManager.set(user.username, loginToken, { ttl: 30 });
 
-    this.logger.log(`USERNAME: ${user.username}, HASHED PASSWORD: ${await Base64.stringify(hmacSHA256(user.password, loginToken))}`);
+    this.logger.log(`USERNAME: ${user.username}, HASHED PASSWORD: ${Base64.stringify(hmacSHA256(user.password, loginToken))}`);
 
     return loginToken;
   }
