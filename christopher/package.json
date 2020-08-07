@@ -40,7 +40,7 @@
     "cache-manager": "^3.3.0",
     "cache-manager-redis-store": "^2.0.0",
     "chownr": "^2.0.0",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "class-transformer-validator": "^0.8.0",
     "class-validator": "^0.12.2",
     "code-point-at": "^1.1.0",
